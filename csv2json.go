@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"./model"
+	"github.com/dstull/csv2json/model"
 )
 
 func main() {
