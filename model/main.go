@@ -16,11 +16,11 @@ type Encoder struct {
 func FromArgs(args []string) (*Encoder, error) {
 	fl := flag.NewFlagSet("csv2json", flag.ExitOnError)
 
-	src := fl.String("src", "", "Source file (default: stdin)")
-	dest := fl.String("dest", "", "Destination file (default: stdout)")
+	src := fl.String("i", "", "Input file (default: stdin)")
+	dest := fl.String("o", "", "Output file (default: stdout)")
 	_ = fl.Parse(args)
 
-	e := Encoder{
+	encoder := Encoder{
 		src:  os.Stdin,
 		dest: os.Stdout,
 	}
@@ -29,31 +29,31 @@ func FromArgs(args []string) (*Encoder, error) {
 		if err != nil {
 			return nil, err
 		}
-		e.src = f
+		encoder.src = f
 	}
 	if *dest != "" && *dest != "-" {
 		f, err := os.Create(*dest)
 		if err != nil {
 			return nil, err
 		}
-		e.dest = f
+		encoder.dest = f
 	}
-	return &e, nil
+	return &encoder, nil
 }
 
-func (e *Encoder) Encode() error {
-	return e.asColumnAndLines()
+func (encoder *Encoder) Encode() error {
+	return encoder.asColumnAndLines()
 }
 
-func (e *Encoder) asColumnAndLines() (err error) {
-	defer deferClose(&err, e.dest.Close)
+func (encoder *Encoder) asColumnAndLines() (err error) {
+	defer deferClose(&err, encoder.dest.Close)
 
-	data, err := makeAsColumneAndLines(e.src)
+	data, err := makeAsColumneAndLines(encoder.src)
 	if err != nil {
 		return err
 	}
 
-	enc := json.NewEncoder(e.dest)
+	enc := json.NewEncoder(encoder.dest)
 	return enc.Encode(&data)
 }
 
