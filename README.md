@@ -3,7 +3,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/dstull/csv2json?style=flat-square)](https://goreportcard.com/report/github.com/dstull/csv2json)
 [![Go Doc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](http://godoc.org/github.com/dstull/csv2json)
 [![Release](https://img.shields.io/github/release/dstull/csv2json.svg?style=flat-square)](https://github.com/dstull/csv2json/releases/latest)
-[![CircleCI](https://circleci.com/gh/dstull/csv2json/tree/master.svg?style=shield)](https://circleci.com/gh/dstull/csv2json/tree/master)
+[![CircleCI](https://circleci.com/gh/dstull/csv2json/tree/master.svg?style=flat-square)](https://circleci.com/gh/dstull/csv2json/tree/master)
 
 Simple tool for converting CSVs to JSON
 
