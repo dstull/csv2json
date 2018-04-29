@@ -10,32 +10,47 @@ Simple tool for converting CSVs to JSON
 
 First install [Go](http://golang.org).
 
-If you just want to install the binary to your current directory and don't care about the source code, run
-
 ```shell
-GOBIN=$(pwd) GOPATH=$(mktemp -d) go get github.com/baltimore-sun-data/csv2json
+GOBIN=$(pwd) GOPATH=$(mktemp -d) go get github.com/dstull/csv2json
+go build
 ```
 
 ## Usage
 
 ```shell
-$ csv2json
+./csv2json -h
 Usage of csv2json:
-  -dest string
-        Destination file (default: stdout)
-  -src string
-        Source file (default: stdin)
+  -i string
+    	Input file (default: stdin)
+  -o string
+    	Output file (default: stdout)
 
 $ more test.csv
-a,b,c
-1,2,3
+first,second,third,fourth
+a,b,c,d
+e,f,g,h
 
-$ csv2json | jsonpp
-[
-        {
-                "a": "1",
-                "b": "2",
-                "c": "3"
-        }
-]
+$ ./csv2json -i=test.csv| jsonpp
+{
+  "columns": [
+    "first",
+    "second",
+    "third",
+    "fourth"
+  ],
+  "lines": [
+    [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    [
+      "e",
+      "f",
+      "g",
+      "h"
+    ]
+  ]
+}
 ```
