@@ -25,18 +25,18 @@ func FromArgs(args []string) (*Encoder, error) {
 		dest: os.Stdout,
 	}
 	if *src != "" && *src != "-" {
-		f, err := os.Open(*src)
+		readHandle, err := os.Open(*src)
 		if err != nil {
 			return nil, err
 		}
-		encoder.src = f
+		encoder.src = readHandle
 	}
 	if *dest != "" && *dest != "-" {
-		f, err := os.Create(*dest)
+		writeHandle, err := os.Create(*dest)
 		if err != nil {
 			return nil, err
 		}
-		encoder.dest = f
+		encoder.dest = writeHandle
 	}
 	return &encoder, nil
 }
@@ -57,45 +57,44 @@ func (encoder *Encoder) asColumnAndLines() (err error) {
 	return enc.Encode(&data)
 }
 
-func makeAsColumneAndLines(src io.ReadCloser) (data [][]string, err error) {
+type JSONStructure struct {
+	Columns []string   `json:"columns"`
+	Lines   [][]string `json:"lines"`
+}
+
+func makeAsColumneAndLines(src io.ReadCloser) (jsonStr *JSONStructure, err error) {
 	defer deferClose(&err, src.Close)
 
 	cr := csv.NewReader(src)
 	cr.Comment = '#'
 	cr.FieldsPerRecord = -1
 
-	return cr.ReadAll()
-	// defer deferClose(&err, src.Close)
-	//
-	// cr := csv.NewReader(src)
-	// cr.Comment = '#'
-	// cr.FieldsPerRecord = -1
-	// cr.ReuseRecord = true
-	//
-	// fields, err := cr.Read()
-	//
-	// // Save headers for each row of dict
-	// dataHeader := make(map[int]string, len(fields))
-	// for i, field := range fields {
-	// 	dataHeader[i] = field
-	// }
-	//
-	// for {
-	// 	fields, err = cr.Read()
-	// 	if err == io.EOF {
-	// 		return data, nil
-	// 	}
-	//
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-	//
-	// 	datum := make(map[string]string, len(fields))
-	// 	for i, val := range fields {
-	// 		datum[dataHeader[i]] = val
-	// 	}
-	// 	data = append(data, datum)
-	// }
+	columns, err := cr.Read()
+
+	lines := [][]string{}
+
+	for {
+		fields, err := cr.Read()
+		if err == io.EOF {
+			jsonStr := JSONStructure{
+				Columns: columns,
+				Lines:   lines,
+			}
+			return &jsonStr, nil
+		}
+
+		if err != nil {
+			return nil, err
+		}
+
+		line := make([]string, len(fields))
+
+		for i, field := range fields {
+			line[i] = field
+		}
+
+		lines = append(lines, line)
+	}
 }
 
 func deferClose(err *error, f func() error) {
