@@ -1,5 +1,9 @@
 # csv2json
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/dstull/csv2json?style=flat-square)](https://goreportcard.com/report/github.com/dstull/csv2json)
+[![Go Doc](https://img.shields.io/badge/godoc-reference-blue.svg?style=flat-square)](http://godoc.org/github.com/dstull/csv2json)
+[![Release](https://img.shields.io/github/release/dstull/csv2json.svg?style=flat-square)](https://github.com/dstull/csv2json/releases/latest)
+
 Simple tool for converting CSVs to JSON
 
 ## Installation
