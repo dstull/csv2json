@@ -5,7 +5,7 @@ import (
 )
 
 func TestCanProcessArgs(t *testing.T) {
-	args := []string{"-i=../testdata/test.csv", "-o=../testdata/test.json"}
+	args := []string{"-i=../testdata/test.csv", "-o=../testdata/tmp/test.json"}
 
 	_, err := FromArgs(args)
 
@@ -15,7 +15,7 @@ func TestCanProcessArgs(t *testing.T) {
 }
 
 func TestCanNotProcessInputFile(t *testing.T) {
-	args := []string{"-i=bad_file.csv", "-o=../testdata/test.json"}
+	args := []string{"-i=bad_file.csv", "-o=../testdata/tmp/test.json"}
 
 	_, err := FromArgs(args)
 
